@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     static final String KEY_DESCRIPTION = "description";
     static final String KEY_URL = "url";
     static final String KEY_URLTOIMAGE = "urlToImage";
-    String API_KEY = "0fb258eaaf8a4e148e614821d03c65ab";
+    String API_KEY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
