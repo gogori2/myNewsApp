@@ -2,6 +2,7 @@ package hr.s1.newsapi;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,20 +25,21 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
+    SwipeRefreshLayout swipeLayout;
     ArrayList<HashMap<String, String>> dataList = new ArrayList<>();
     static final String KEY_TITLE = "title";
     static final String KEY_DESCRIPTION = "description";
     static final String KEY_URL = "url";
     static final String KEY_URLTOIMAGE = "urlToImage";
     String API_KEY = "";
-  //String myApiKey = BuildConfig.API_KEY;
+   // String API_KEY = MainActivity.this.getString(R.string.api_key);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listView =findViewById(R.id.listview);
-        String news_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey="+API_KEY;
+        listView =findViewById(R.id.list);
+        final String news_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey="+API_KEY;
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -50,6 +52,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         new MainActivity.AsyncHttpTask().execute(news_url);
+
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+
+        swipeLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("Swipe", "onRefresh called from SwipeRefreshLayout");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        new MainActivity.AsyncHttpTask().execute(news_url);
+                    }
+                }
+        );
     }
 
 
@@ -121,7 +138,9 @@ public class MainActivity extends AppCompatActivity {
         }
        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mylist);
        listView.setAdapter(adapter);
-}
+       swipeLayout.setRefreshing(false);
+
+    }
 
 
 }
