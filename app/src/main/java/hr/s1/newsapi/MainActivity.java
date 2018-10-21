@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     static final String KEY_URL = "url";
     static final String KEY_URLTOIMAGE = "urlToImage";
     String API_KEY = "";
+  //String myApiKey = BuildConfig.API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,10 @@ public class MainActivity extends AppCompatActivity {
             for (int i=0; i<articles.length();i++){
             JSONObject article=articles.optJSONObject(i);
             String title2 = article.optString("title");
-            mylist.add(title2);
+            String image = article.optString("urlToImage");
+            String desc = article.optString("description");
+
+                mylist.add(title2);
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put(KEY_TITLE, article.optString(KEY_TITLE));
@@ -108,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 dataList.add(map);
 
             Log.i("Titles",title2);
+            Log.i("image",image);
+            Log.i("desc",desc);
             }
 
         } catch (Exception e) {
