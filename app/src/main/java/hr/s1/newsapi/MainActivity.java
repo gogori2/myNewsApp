@@ -31,16 +31,18 @@ public class MainActivity extends AppCompatActivity {
     static final String KEY_DESCRIPTION = "description";
     static final String KEY_URL = "url";
     static final String KEY_URLTOIMAGE = "urlToImage";
-    String API_KEY = "";
-   // String API_KEY = MainActivity.this.getString(R.string.api_key);
+//  String API_KEY = "";
+    //mogu dodat gitignore za gradleprop
+    String API_KEY = BuildConfig.APIKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listView =findViewById(R.id.list);
+
         final String news_url = "https://newsapi.org/v2/top-headlines?country=us&apiKey="+API_KEY;
 
+        listView =findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -53,14 +55,12 @@ public class MainActivity extends AppCompatActivity {
         });
         new MainActivity.AsyncHttpTask().execute(news_url);
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-
+        swipeLayout = findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
                         Log.i("Swipe", "onRefresh called from SwipeRefreshLayout");
-
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
                         new MainActivity.AsyncHttpTask().execute(news_url);
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
-
 
     public class AsyncHttpTask extends AsyncTask <String, Void, String>{
         @Override
@@ -139,8 +138,5 @@ public class MainActivity extends AppCompatActivity {
        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mylist);
        listView.setAdapter(adapter);
        swipeLayout.setRefreshing(false);
-
     }
-
-
 }
